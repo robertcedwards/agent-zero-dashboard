@@ -1043,7 +1043,7 @@ let priorities = S('priorities') || defaultPriorities;
 function renderPriorities() {
   const list = document.getElementById('priorities-list');
   list.innerHTML = priorities.map((p,i) => `
-    <div class="priority-item ${p.done?'checked':"'}">
+    <div class="priority-item ${p.done?"checked":""}">
       <input type="checkbox" ${p.done?'checked':''} onchange="togglePriority(${i})">
       <span class="priority-text" onclick="togglePriority(${i})">${p.text}</span>
       <button class="priority-del" onclick="delPriority(${i})">✕</button>
@@ -1456,7 +1456,7 @@ function openIntelModal() {
 // ===== STUDIO TAB =====
 const DEFAULT_IDEAS = [
   { id:'s1', title:'HitFlow — Building a Fitness Tracker in Public', channel:'blog', status:'ideas', date:'2026-02-23', desc:'Full development diary from concept to hitflow.xyz. TUL methodology, TypeScript architecture decisions.' },
-  { id:'s2', title:'4evr AI: Can You Preserve a Loved One's Voice?', channel:'blog', status:'drafting', date:'2026-02-21', desc:'Ethical + technical deep dive into digital twins. ElevenLabs, HeyGen, memory persistence.' },
+  { id:'s2', title:'4evr AI: Can You Preserve a Loved Ones Voice?', channel:'blog', status:'drafting', date:'2026-02-21', desc:'Ethical + technical deep dive into digital twins. ElevenLabs, HeyGen, memory persistence.' },
   { id:'s3', title:'Mural Bot Thread — CNC Robot Paints Murals', channel:'farcaster', status:'ideas', date:'2026-02-20', desc:'Visual thread showing the Mural Bot build process. Good for 0xHashbrown audience.' },
   { id:'s4', title:'My AI Toolstack in 2026', channel:'blog', status:'ideas', date:'2026-02-19', desc:'Full breakdown of Agent Zero, Limitless, Mentra, Plaud AI — life-logging as a creative practice.' },
   { id:'s5', title:'Warren Buffett AI Clone POC — What I Learned', channel:'farcaster', status:'published', date:'2026-02-15', desc:'Short thread on building the 4evr AI proof of concept.' },
