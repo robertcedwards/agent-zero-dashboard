@@ -550,6 +550,100 @@ body::before {
 }
 .btn-cancel:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
 .projects-header { margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between; }
+
+/* ===== AGENTS TAB ===== */
+.agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.agent-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1.25rem; transition: all 0.2s; cursor: pointer; }
+.agent-card:hover { background: var(--card-hover); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,255,136,0.08); }
+.agent-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.agent-icon { font-size: 1.5rem; }
+.agent-name { font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 0.85rem; letter-spacing: 1px; }
+.agent-role { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+.agent-status { margin-left: auto; display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.7rem; }
+.status-dot-online { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent); animation:pulse 2s infinite; }
+.status-dot-busy { width:8px; height:8px; border-radius:50%; background:var(--yellow); box-shadow:0 0 8px var(--yellow); }
+.status-dot-offline { width:8px; height:8px; border-radius:50%; background:var(--muted); }
+.agent-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+.agent-caps { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 0.75rem; }
+.agent-cap { background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.15); color: var(--accent); font-family: var(--mono); font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; }
+
+/* ===== MEETINGS TAB ===== */
+.meetings-today { margin-bottom: 1rem; }
+.meeting-today-card { background: rgba(0,255,136,0.06); border: 1px solid rgba(0,255,136,0.2); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 0.75rem; }
+.meeting-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s; }
+.meeting-card:hover { background: var(--card-hover); border-color: rgba(0,212,255,0.3); }
+.meeting-title { font-family: var(--mono); font-weight: 700; font-size: 0.9rem; color: var(--text); }
+.meeting-meta { display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap; }
+.meeting-meta span { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+.meeting-type { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-family: var(--mono); }
+.meeting-type-zoom { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+.meeting-type-call { background: rgba(0,255,136,0.1); color: var(--accent); border: 1px solid rgba(0,255,136,0.2); }
+.meeting-type-inperson { background: rgba(255,217,61,0.1); color: var(--yellow); border: 1px solid rgba(255,217,61,0.2); }
+.meeting-type-async { background: rgba(108,99,255,0.1); color: var(--purple); border: 1px solid rgba(108,99,255,0.2); }
+.meeting-expand { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--card-border); display: none; }
+.meeting-card.expanded .meeting-expand { display: block; }
+.agenda-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0; font-size: 0.82rem; }
+.agenda-item input[type=checkbox] { accent-color: var(--accent); }
+.meeting-notes-area { width: 100%; background: rgba(255,255,255,0.02); border: 1px solid var(--card-border); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem; margin-top: 0.5rem; resize: vertical; min-height: 80px; }
+
+/* ===== INTEL TAB ===== */
+.intel-brief { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.15); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1.5rem; }
+.intel-brief h3 { font-family: var(--mono); font-size: 0.8rem; color: var(--red); letter-spacing: 2px; margin-bottom: 0.75rem; }
+.intel-brief-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.4rem 0; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.intel-brief-item:last-child { border-bottom: none; }
+.intel-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.filter-btn { background: var(--card); border: 1px solid var(--card-border); color: var(--muted); font-family: var(--mono); font-size: 0.72rem; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+.filter-btn.active, .filter-btn:hover { background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.3); color: var(--accent); }
+.intel-item { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 0.6rem; transition: all 0.2s; }
+.intel-item:hover { background: var(--card-hover); }
+.intel-item-header { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.intel-item-title { font-family: var(--mono); font-size: 0.85rem; color: var(--text); font-weight: 600; flex: 1; }
+.intel-tag { font-size: 0.65rem; font-family: var(--mono); padding: 2px 8px; border-radius: 4px; }
+.intel-tag-ai { background: rgba(108,99,255,0.15); color: var(--purple); border: 1px solid rgba(108,99,255,0.25); }
+.intel-tag-web3 { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+.intel-tag-creative { background: rgba(255,107,107,0.1); color: var(--red); border: 1px solid rgba(255,107,107,0.2); }
+.intel-tag-hardware { background: rgba(255,217,61,0.1); color: var(--yellow); border: 1px solid rgba(255,217,61,0.2); }
+.intel-tag-synth { background: rgba(0,255,136,0.08); color: var(--accent); border: 1px solid rgba(0,255,136,0.18); }
+.importance-hot { color: #FF6B6B; }
+.importance-notable { color: var(--yellow); }
+.importance-ref { color: var(--muted); }
+.intel-summary { font-size: 0.78rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.5; }
+.intel-footer { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+.intel-source { font-family: var(--mono); font-size: 0.68rem; color: var(--cyan); text-decoration: none; }
+.intel-source:hover { text-decoration: underline; }
+.intel-date { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); margin-left: auto; }
+.intel-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; }
+.intel-del:hover { color: var(--red); }
+
+/* ===== STUDIO TAB ===== */
+.studio-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+@media(max-width:768px) { .studio-stats { grid-template-columns: repeat(2,1fr); } }
+.studio-stat { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1rem; text-align: center; }
+.studio-stat-val { font-family: var(--mono); font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+.studio-stat-label { font-size: 0.7rem; color: var(--muted); font-family: var(--mono); letter-spacing: 1px; margin-top: 4px; }
+.studio-idea-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem; margin-bottom: 0.6rem; cursor: pointer; transition: all 0.2s; }
+.studio-idea-card:hover { background: var(--card-hover); border-color: rgba(0,255,136,0.2); }
+.studio-idea-title { font-family: var(--mono); font-size: 0.82rem; font-weight: 700; color: var(--text); }
+.studio-idea-meta { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.4rem; flex-wrap: wrap; }
+.studio-channel-tag { font-size: 0.65rem; font-family: var(--mono); padding: 2px 8px; border-radius: 4px; background: rgba(108,99,255,0.1); color: var(--purple); border: 1px solid rgba(108,99,255,0.2); }
+.studio-idea-date { font-size: 0.68rem; color: var(--muted); font-family: var(--mono); margin-left: auto; }
+.channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+.channel-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1.25rem; text-align: center; transition: all 0.2s; }
+.channel-card:hover { background: var(--card-hover); border-color: rgba(0,255,136,0.2); }
+.channel-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.channel-name { font-family: var(--mono); font-weight: 700; font-size: 0.85rem; color: var(--text); }
+.channel-sub { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+.channel-link { display: inline-block; margin-top: 0.75rem; font-family: var(--mono); font-size: 0.7rem; color: var(--accent); text-decoration: none; border: 1px solid rgba(0,255,136,0.2); padding: 4px 12px; border-radius: 4px; transition: all 0.2s; }
+.channel-link:hover { background: rgba(0,255,136,0.1); }
+
+/* ===== SHARED ===== */
+.section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.section-header h2 { font-family: var(--mono); font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+.muted-label { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+.btn-add { margin-left: auto; background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); color: var(--accent); font-family: var(--mono); font-size: 0.72rem; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+.btn-add:hover { background: rgba(0,255,136,0.15); }
+.empty-state { text-align: center; padding: 3rem; color: var(--muted); font-family: var(--mono); font-size: 0.8rem; }
+
 </style>
 </head>
 <body>
@@ -565,6 +659,10 @@ body::before {
     <button class="tab-btn" data-tab="projects">📋 PROJECTS</button>
     <button class="tab-btn" data-tab="timeline">📅 TIMELINE</button>
     <button class="tab-btn" data-tab="notes">📝 NOTES</button>
+    <button class="tab-btn" data-tab="agents">🤖 AGENTS</button>
+    <button class="tab-btn" data-tab="meetings">📞 MEETINGS</button>
+    <button class="tab-btn" data-tab="intel">🔥 INTEL</button>
+    <button class="tab-btn" data-tab="studio">📡 STUDIO</button>
   </nav>
   <div class="header-right">
     <span id="live-clock"></span>
@@ -669,6 +767,130 @@ body::before {
   </div>
 </div>
 
+
+<!-- ====== AGENTS TAB ====== -->
+<div class="tab-content" id="tab-agents">
+  <div class="section-header">
+    <h2>🤖 AGENT COMMAND CENTER</h2>
+    <span class="muted-label">// connected services &amp; automation</span>
+  </div>
+
+  <div class="agents-grid" id="agents-grid"></div>
+
+  <div class="section-header" style="margin-top:2rem">
+    <h2>⚡ SCHEDULER TASKS</h2>
+    <span class="muted-label">// active automations</span>
+  </div>
+  <div class="intel-list" id="scheduler-list"></div>
+
+  <div class="section-header" style="margin-top:2rem">
+    <h2>📋 EXEC LOG</h2>
+    <span class="muted-label">// decisions &amp; actions</span>
+    <button class="btn-add" onclick="openAgentLogModal()">+ LOG DECISION</button>
+  </div>
+  <div class="intel-list" id="exec-log-list"></div>
+</div>
+
+<!-- ====== MEETINGS TAB ====== -->
+<div class="tab-content" id="tab-meetings">
+  <div class="section-header">
+    <h2>📞 MEETING PREP</h2>
+    <span class="muted-label">// never walk in unprepared</span>
+    <button class="btn-add" onclick="openMeetingModal()">+ ADD MEETING</button>
+  </div>
+
+  <div class="meetings-today" id="meetings-today"></div>
+
+  <div class="section-header" style="margin-top:1.5rem">
+    <h2>UPCOMING</h2>
+  </div>
+  <div class="meetings-list" id="meetings-upcoming"></div>
+
+  <div class="section-header" style="margin-top:1.5rem">
+    <h2>ARCHIVE</h2>
+    <span class="muted-label">// past meetings</span>
+  </div>
+  <div class="meetings-list" id="meetings-archive"></div>
+</div>
+
+<!-- ====== INTEL TAB ====== -->
+<div class="tab-content" id="tab-intel">
+  <div class="section-header">
+    <h2>🔥 INTEL FEED</h2>
+    <span class="muted-label">// signal over noise</span>
+    <button class="btn-add" onclick="openIntelModal()">+ ADD INTEL</button>
+  </div>
+
+  <div class="intel-brief" id="intel-brief"></div>
+
+  <div class="intel-filters">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="ai">🧠 AI TOOLS</button>
+    <button class="filter-btn" data-filter="web3">⛓️ WEB3</button>
+    <button class="filter-btn" data-filter="creative">🎨 CREATIVE TECH</button>
+    <button class="filter-btn" data-filter="hardware">🔧 HARDWARE</button>
+    <button class="filter-btn" data-filter="synth">🎹 SYNTH/MUSIC</button>
+  </div>
+
+  <div class="intel-list" id="intel-items"></div>
+</div>
+
+<!-- ====== STUDIO TAB ====== -->
+<div class="tab-content" id="tab-studio">
+  <div class="section-header">
+    <h2>📡 BUILD IN PUBLIC STUDIO</h2>
+    <span class="muted-label">// content pipeline — blog + farcaster + docs</span>
+    <button class="btn-add" onclick="openIdeaModal()">+ ADD IDEA</button>
+  </div>
+
+  <div class="studio-stats" id="studio-stats"></div>
+
+  <div class="kanban" id="studio-kanban">
+    <div class="kanban-col">
+      <div class="kanban-header"><span>💡 IDEAS</span><span class="col-count" id="studio-ideas-count">0</span></div>
+      <div class="kanban-cards" id="studio-ideas"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-header"><span>✍️ DRAFTING</span><span class="col-count" id="studio-drafting-count">0</span></div>
+      <div class="kanban-cards" id="studio-drafting"></div>
+    </div>
+    <div class="kanban-col">
+      <div class="kanban-header"><span>🚀 PUBLISHED</span><span class="col-count" id="studio-published-count">0</span></div>
+      <div class="kanban-cards" id="studio-published"></div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top:2rem">
+    <h2>🌐 CHANNELS</h2>
+    <span class="muted-label">// where to publish</span>
+  </div>
+  <div class="channels-grid">
+    <div class="channel-card">
+      <div class="channel-icon">📝</div>
+      <div class="channel-name">robertcedwards.com</div>
+      <div class="channel-sub">Astro + Netlify</div>
+      <a href="https://robertcedwards.com" target="_blank" class="channel-link">OPEN ↗</a>
+    </div>
+    <div class="channel-card">
+      <div class="channel-icon">🟣</div>
+      <div class="channel-name">Farcaster</div>
+      <div class="channel-sub">@0xHashbrown</div>
+      <a href="https://warpcast.com/0xhashbrown" target="_blank" class="channel-link">OPEN ↗</a>
+    </div>
+    <div class="channel-card">
+      <div class="channel-icon">🐙</div>
+      <div class="channel-name">GitHub</div>
+      <div class="channel-sub">robertcedwards</div>
+      <a href="https://github.com/robertcedwards" target="_blank" class="channel-link">OPEN ↗</a>
+    </div>
+    <div class="channel-card">
+      <div class="channel-icon">💧</div>
+      <div class="channel-name">HitFlow</div>
+      <div class="channel-sub">hitflow.xyz</div>
+      <a href="https://hitflow.xyz" target="_blank" class="channel-link">OPEN ↗</a>
+    </div>
+  </div>
+</div>
 </main>
 
 <!-- MODALS -->
@@ -1031,6 +1253,282 @@ document.addEventListener('keydown', e => {
 document.querySelectorAll('.modal input').forEach(inp => {
   inp.addEventListener('keydown', e => { if (e.key==='Enter') inp.closest('.modal').querySelector('.btn-primary').click(); });
 });
+
+// ===== AGENTS TAB =====
+const DEFAULT_AGENTS = [
+  { id:'az', icon:'🤖', name:'AGENT ZERO', role:'Personal AI Assistant', status:'online', model:'claude-sonnet-4.6', desc:'Main orchestrator — memory, scheduling, GitHub, Limitless integration.', caps:['Memory','GitHub','Scheduling','Limitless','Vision'] },
+  { id:'browser', icon:'🌐', name:'BROWSER AGENT', role:'Web Automation', status:'idle', model:'claude-sonnet-4.6', desc:'Playwright-based browser automation for scraping, form filling, and web research.', caps:['Playwright','Screenshots','Forms','Scraping'] },
+  { id:'dev', icon:'⚙️', name:'DEVELOPER', role:'Code Generation', status:'idle', model:'claude-sonnet-4.6', desc:'Specialized for complex software development, debugging, and architecture.', caps:['TypeScript','Python','React','Node.js','Astro'] },
+  { id:'researcher', icon:'🔬', name:'RESEARCHER', role:'Data Analysis & Research', status:'idle', model:'gemini-3-flash', desc:'Information gathering, data analysis, and comprehensive report generation.', caps:['Research','Analysis','Reports','Documents'] },
+  { id:'hacker', icon:'💀', name:'HACKER', role:'Security & Penetration Testing', status:'offline', model:'claude-sonnet-4.6', desc:'Cybersecurity, vulnerability analysis, and security auditing.', caps:['Pentest','OSINT','CVE','Recon'] }
+];
+const DEFAULT_SCHEDULER = [
+  { id:'GPcPT4Iv', name:'Morning Brief', schedule:'Daily 8am CST', status:'active', desc:'GitHub issue with HN news, weather, workspace status' },
+  { id:'MC-dash', name:'Mission Control Deploy', schedule:'On push', status:'active', desc:'Auto-deploy to GitHub Pages via Actions' }
+];
+const DEFAULT_EXEC_LOG = [
+  { date:'2026-02-23', decision:'Switched to two-repo architecture', agents:['Agent Zero'], summary:'agent-zero-workspace (private) + agent-zero-dashboard (public) for separation of concerns' },
+  { date:'2026-02-22', decision:'4evr AI meeting debrief', agents:['Agent Zero'], summary:'Paused active development pending strategy alignment with Kevin. Resume after Feb 28.' },
+  { date:'2026-02-21', decision:'Onboarded Agent Zero as personal assistant', agents:['Agent Zero'], summary:'Connected GitHub (5 repos), Limitless API, set up morning brief, activated project workspace.' }
+];
+
+function renderAgents() {
+  const agents = S('agents') || DEFAULT_AGENTS;
+  const el = document.getElementById('agents-grid');
+  el.innerHTML = agents.map(a => `
+    <div class="agent-card">
+      <div class="agent-header">
+        <span class="agent-icon">${a.icon}</span>
+        <div><div class="agent-name">${a.name}</div><div class="agent-role">${a.role}</div></div>
+        <div class="agent-status">
+          <div class="status-dot-${a.status === 'online' ? 'online' : a.status === 'idle' ? 'busy' : 'offline'}"></div>
+          <span style="color:var(--muted)">${a.status.toUpperCase()}</span>
+        </div>
+      </div>
+      <div class="agent-desc">${a.desc}</div>
+      <div class="agent-caps">${a.caps.map(c => `<span class="agent-cap">${c}</span>`).join('')}</div>
+      <div style="margin-top:0.75rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted)">MODEL: ${a.model}</div>
+    </div>`).join('');
+
+  const sched = S('scheduler_tasks') || DEFAULT_SCHEDULER;
+  document.getElementById('scheduler-list').innerHTML = sched.map(t => `
+    <div class="intel-item">
+      <div class="intel-item-header">
+        <span class="intel-item-title">${t.name}</span>
+        <span class="intel-tag intel-tag-ai">${t.status.toUpperCase()}</span>
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--muted)">${t.schedule}</span>
+      </div>
+      <div class="intel-summary">${t.desc} <span style="color:var(--muted)">// ID: ${t.id}</span></div>
+    </div>`).join('');
+
+  const log = S('exec_log') || DEFAULT_EXEC_LOG;
+  document.getElementById('exec-log-list').innerHTML = log.length ? log.map(l => `
+    <div class="intel-item">
+      <div class="intel-item-header">
+        <span class="intel-item-title">${l.decision}</span>
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--muted)">${l.date}</span>
+      </div>
+      <div class="intel-summary">${l.summary}</div>
+      <div style="margin-top:4px;font-family:var(--mono);font-size:0.68rem;color:var(--accent)">Agents: ${l.agents.join(', ')}</div>
+    </div>`).join('') : '<div class="empty-state">// no decisions logged yet</div>';
+}
+
+function openAgentLogModal() {
+  const q = prompt('Decision/action taken:');
+  if (!q) return;
+  const s = prompt('Summary:');
+  const log = S('exec_log') || DEFAULT_EXEC_LOG;
+  log.unshift({ date: new Date().toISOString().split('T')[0], decision: q, agents: ['Rob'], summary: s || '' });
+  W('exec_log', log);
+  renderAgents();
+}
+
+// ===== MEETINGS TAB =====
+const DEFAULT_MEETINGS = [
+  { id:'m1', title:'4evr AI Strategy Sync', datetime:'2026-02-28T14:00', attendees:'Kevin (kevinshuster)', type:'zoom', prep:'Review ElevenLabs + HeyGen integration progress. Align on SOUL.md spec. Discuss Supabase auth approach.', agenda:['ElevenLabs voice clone status','HeyGen avatar integration','SOUL.md data structure','MVP scope for March 15','Next sprint planning'], notes:'', actions:[], past:false },
+  { id:'m2', title:'Mural Bot Site Visit', datetime:'2026-03-10T10:00', attendees:'Kristofoletti', type:'inperson', prep:'Bring laptop with SVG-to-CNC pipeline demo. Discuss wall dimensions for first mural test.', agenda:['Wall scan + measurements','SVG path preview walkthrough','Paint color palette finalization','Test mural date confirmation'], notes:'', actions:[], past:false },
+  { id:'m3', title:'GPJ IBM Account Sync', datetime:'2026-03-03T10:00', attendees:'GPJ IBM Team', type:'zoom', prep:'Review current deliverables status. Prepare Q1 roadmap update.', agenda:['Q1 deliverables review','Upcoming IBM events','Resource allocation','Creative tech showcase ideas'], notes:'', actions:[], past:false }
+];
+
+function renderMeetings() {
+  const meetings = S('meetings') || DEFAULT_MEETINGS;
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+
+  const todayMeetings = meetings.filter(m => !m.past && m.datetime.startsWith(today));
+  const upcoming = meetings.filter(m => !m.past && !m.datetime.startsWith(today) && new Date(m.datetime) > now);
+  const archive = meetings.filter(m => m.past || new Date(m.datetime) < now);
+
+  const renderCard = (m, highlight) => {
+    const dt = new Date(m.datetime);
+    const typeClass = {zoom:'zoom',call:'call',inperson:'inperson',async:'async'}[m.type] || 'call';
+    return `<div class="meeting-card ${highlight?'meeting-today-card':''}" onclick="this.classList.toggle('expanded')">
+      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+        <div class="meeting-title">${m.title}</div>
+        <span class="meeting-type meeting-type-${typeClass}">${m.type.toUpperCase()}</span>
+      </div>
+      <div class="meeting-meta">
+        <span>📅 ${dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</span>
+        <span>⏰ ${dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/Chicago'})} CST</span>
+        <span>👤 ${m.attendees}</span>
+      </div>
+      <div class="meeting-expand">
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-bottom:0.5rem">// PREP NOTES</div>
+        <div style="font-size:0.8rem;line-height:1.6;margin-bottom:0.75rem">${m.prep}</div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-bottom:0.5rem">// AGENDA</div>
+        ${m.agenda.map(a => `<div class="agenda-item"><input type="checkbox"> ${a}</div>`).join('')}
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin:0.75rem 0 0.5rem">// NOTES</div>
+        <textarea class="meeting-notes-area" placeholder="// meeting notes...">${m.notes}</textarea>
+      </div>
+    </div>`;
+  };
+
+  document.getElementById('meetings-today').innerHTML = todayMeetings.length
+    ? todayMeetings.map(m => renderCard(m, true)).join('')
+    : '<div style="font-family:var(--mono);font-size:0.78rem;color:var(--muted);padding:0.75rem 0">// no meetings today — enjoy the deep work 🎯</div>';
+
+  document.getElementById('meetings-upcoming').innerHTML = upcoming.length
+    ? upcoming.map(m => renderCard(m, false)).join('')
+    : '<div class="empty-state">// no upcoming meetings</div>';
+
+  document.getElementById('meetings-archive').innerHTML = archive.length
+    ? archive.map(m => renderCard(m, false)).join('')
+    : '<div class="empty-state">// archive empty</div>';
+}
+
+function openMeetingModal() {
+  const title = prompt('Meeting title:');
+  if (!title) return;
+  const datetime = prompt('Date/time (YYYY-MM-DDTHH:MM):', new Date().toISOString().slice(0,16));
+  const attendees = prompt('Attendees:');
+  const type = prompt('Type (zoom/call/inperson/async):', 'zoom');
+  const prep = prompt('Prep notes:') || '';
+  const meetings = S('meetings') || DEFAULT_MEETINGS;
+  meetings.push({ id:'m'+Date.now(), title, datetime:datetime||new Date().toISOString().slice(0,16), attendees:attendees||'TBD', type:type||'zoom', prep, agenda:[], notes:'', actions:[], past:false });
+  W('meetings', meetings);
+  renderMeetings();
+}
+
+// ===== INTEL TAB =====
+const DEFAULT_INTEL = [
+  { id:'i1', title:'Claude 4 Sonnet Released — Major Coding Improvements', category:'ai', importance:'hot', summary:'Anthropic ships Claude Sonnet 4.6 with significantly better code generation, multi-step reasoning, and tool use. Key upgrade for Agent Zero workflows.', source:'https://anthropic.com', date:'2026-02-23' },
+  { id:'i2', title:'Farcaster Frames v2 — Native Mini-Apps in Feed', category:'web3', importance:'hot', summary:'Frames v2 allows full React apps embedded in Warpcast. Major opportunity for HitFlow social sharing and 4evr AI demos as 0xHashbrown.', source:'https://docs.farcaster.xyz', date:'2026-02-22' },
+  { id:'i3', title:'ElevenLabs Voice Cloning API v3 — Real-time Streaming', category:'ai', importance:'notable', summary:'New real-time streaming endpoint cuts latency to <200ms. Critical for 4evr AI conversational digital twin experience.', source:'https://elevenlabs.io', date:'2026-02-21' },
+  { id:'i4', title:'Astro 5.0 Content Collections — Type-safe Markdown', category:'creative', importance:'notable', summary:'Astro 5 ships with fully typed content collections. Worth upgrading Portfolio-2024 for better blog pipeline DX.', source:'https://astro.build', date:'2026-02-20' },
+  { id:'i5', title:'Modal Sculpt firmware update — MPE + Eurorack CV out', category:'synth', importance:'ref', summary:'New firmware adds MPE support and CV gate output for Eurorack integration. Good for generative music experiments.', source:'https://modalelectronics.com', date:'2026-02-19' },
+  { id:'i6', title:'Teensy 4.1 — USB MIDI multi-port update', category:'hardware', importance:'ref', summary:'PJRC releases USB MIDI multi-port support for Teensy 4.1. Directly relevant for Pocket Operator MIDI sync project.', source:'https://pjrc.com', date:'2026-02-18' }
+];
+
+let intelFilter = 'all';
+
+function renderIntel() {
+  const items = S('intel') || DEFAULT_INTEL;
+  const filtered = intelFilter === 'all' ? items : items.filter(i => i.category === intelFilter);
+
+  // Brief = top 3 hot/notable
+  const brief = items.filter(i => i.importance === 'hot' || i.importance === 'notable').slice(0,3);
+  document.getElementById('intel-brief').innerHTML = `
+    <h3>// DAILY BRIEF — TOP SIGNALS</h3>
+    ${brief.map(i => `<div class="intel-brief-item"><span>${i.importance==='hot'?'🔥':'⚡'}</span><div><strong>${i.title}</strong><br><span style="color:var(--muted)">${i.summary.slice(0,100)}...</span></div></div>`).join('')}`;
+
+  document.getElementById('intel-items').innerHTML = filtered.length
+    ? filtered.map(i => `
+      <div class="intel-item" data-category="${i.category}">
+        <div class="intel-item-header">
+          <span class="intel-item-title">${i.title}</span>
+          <span class="intel-tag intel-tag-${i.category}">${i.category.toUpperCase()}</span>
+          <span class="${i.importance==='hot'?'importance-hot':i.importance==='notable'?'importance-notable':'importance-ref'}">${i.importance==='hot'?'🔥 HOT':i.importance==='notable'?'⚡ NOTABLE':'📌 REF'}</span>
+          <button class="intel-del" onclick="deleteIntel('${i.id}')">✕</button>
+        </div>
+        <div class="intel-summary">${i.summary}</div>
+        <div class="intel-footer">
+          <a href="${i.source}" target="_blank" class="intel-source">${i.source.replace('https://','')}</a>
+          <span class="intel-date">${i.date}</span>
+        </div>
+      </div>`).join('')
+    : '<div class="empty-state">// no intel items in this category</div>';
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === intelFilter);
+    btn.onclick = () => { intelFilter = btn.dataset.filter; renderIntel(); };
+  });
+}
+
+function deleteIntel(id) {
+  const items = S('intel') || DEFAULT_INTEL;
+  W('intel', items.filter(i => i.id !== id));
+  renderIntel();
+}
+
+function openIntelModal() {
+  const title = prompt('Intel title:');
+  if (!title) return;
+  const category = prompt('Category (ai/web3/creative/hardware/synth):', 'ai');
+  const importance = prompt('Importance (hot/notable/ref):', 'notable');
+  const summary = prompt('Summary:') || '';
+  const source = prompt('Source URL:') || '';
+  const items = S('intel') || DEFAULT_INTEL;
+  items.unshift({ id:'i'+Date.now(), title, category:category||'ai', importance:importance||'notable', summary, source, date:new Date().toISOString().split('T')[0] });
+  W('intel', items);
+  renderIntel();
+}
+
+// ===== STUDIO TAB =====
+const DEFAULT_IDEAS = [
+  { id:'s1', title:'HitFlow — Building a Fitness Tracker in Public', channel:'blog', status:'ideas', date:'2026-02-23', desc:'Full development diary from concept to hitflow.xyz. TUL methodology, TypeScript architecture decisions.' },
+  { id:'s2', title:'4evr AI: Can You Preserve a Loved One's Voice?', channel:'blog', status:'drafting', date:'2026-02-21', desc:'Ethical + technical deep dive into digital twins. ElevenLabs, HeyGen, memory persistence.' },
+  { id:'s3', title:'Mural Bot Thread — CNC Robot Paints Murals', channel:'farcaster', status:'ideas', date:'2026-02-20', desc:'Visual thread showing the Mural Bot build process. Good for 0xHashbrown audience.' },
+  { id:'s4', title:'My AI Toolstack in 2026', channel:'blog', status:'ideas', date:'2026-02-19', desc:'Full breakdown of Agent Zero, Limitless, Mentra, Plaud AI — life-logging as a creative practice.' },
+  { id:'s5', title:'Warren Buffett AI Clone POC — What I Learned', channel:'farcaster', status:'published', date:'2026-02-15', desc:'Short thread on building the 4evr AI proof of concept.' },
+  { id:'s6', title:'Agent Zero Morning Brief Setup', channel:'github', status:'published', date:'2026-02-21', desc:'Published the morning_brief.py workflow to agent-zero-workspace.' }
+];
+
+function renderStudio() {
+  const ideas = S('studio_ideas') || DEFAULT_IDEAS;
+  const cols = { ideas: document.getElementById('studio-ideas'), drafting: document.getElementById('studio-drafting'), published: document.getElementById('studio-published') };
+  const counts = { ideas: 0, drafting: 0, published: 0 };
+
+  Object.keys(cols).forEach(k => cols[k].innerHTML = '');
+
+  ideas.forEach(idea => {
+    if (!cols[idea.status]) return;
+    counts[idea.status]++;
+    const card = document.createElement('div');
+    card.className = 'studio-idea-card';
+    card.innerHTML = `
+      <div class="studio-idea-title">${idea.title}</div>
+      <div class="studio-idea-meta">
+        <span class="studio-channel-tag">${idea.channel.toUpperCase()}</span>
+        <span class="studio-idea-date">${idea.date}</span>
+      </div>
+      ${idea.desc ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:0.4rem;line-height:1.4">${idea.desc}</div>` : ''}
+      <div style="margin-top:0.6rem;display:flex;gap:0.4rem">
+        ${idea.status !== 'ideas' ? `<button onclick="moveIdea('${idea.id}','ideas')" style="background:none;border:1px solid var(--card-border);color:var(--muted);font-family:var(--mono);font-size:0.65rem;padding:3px 8px;border-radius:4px;cursor:pointer">◀ BACK</button>` : ''}
+        ${idea.status !== 'published' ? `<button onclick="moveIdea('${idea.id}','${idea.status==='ideas'?'drafting':'published'}')" style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:var(--accent);font-family:var(--mono);font-size:0.65rem;padding:3px 8px;border-radius:4px;cursor:pointer">${idea.status==='ideas'?'DRAFT ▶':'PUBLISH ▶'}</button>` : ''}
+        <button onclick="deleteIdea('${idea.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;margin-left:auto">✕</button>
+      </div>`;
+    cols[idea.status].appendChild(card);
+  });
+
+  Object.keys(counts).forEach(k => document.getElementById(`studio-${k}-count`).textContent = counts[k]);
+
+  // Stats
+  document.getElementById('studio-stats').innerHTML = `
+    <div class="studio-stat"><div class="studio-stat-val">${ideas.length}</div><div class="studio-stat-label">TOTAL IDEAS</div></div>
+    <div class="studio-stat"><div class="studio-stat-val" style="color:var(--purple)">${counts.drafting}</div><div class="studio-stat-label">IN DRAFT</div></div>
+    <div class="studio-stat"><div class="studio-stat-val" style="color:var(--cyan)">${counts.published}</div><div class="studio-stat-label">PUBLISHED</div></div>
+    <div class="studio-stat"><div class="studio-stat-val" style="color:var(--yellow)">${counts.ideas}</div><div class="studio-stat-label">PIPELINE</div></div>`;
+}
+
+function moveIdea(id, newStatus) {
+  const ideas = S('studio_ideas') || DEFAULT_IDEAS;
+  const idea = ideas.find(i => i.id === id);
+  if (idea) { idea.status = newStatus; W('studio_ideas', ideas); renderStudio(); }
+}
+
+function deleteIdea(id) {
+  const ideas = S('studio_ideas') || DEFAULT_IDEAS;
+  W('studio_ideas', ideas.filter(i => i.id !== id));
+  renderStudio();
+}
+
+function openIdeaModal() {
+  const title = prompt('Content idea title:');
+  if (!title) return;
+  const channel = prompt('Channel (blog/farcaster/github/video):', 'blog');
+  const desc = prompt('Brief description:') || '';
+  const ideas = S('studio_ideas') || DEFAULT_IDEAS;
+  ideas.unshift({ id:'s'+Date.now(), title, channel:channel||'blog', status:'ideas', date:new Date().toISOString().split('T')[0], desc });
+  W('studio_ideas', ideas);
+  renderStudio();
+}
+
+// ===== INIT NEW TABS =====
+renderAgents();
+renderMeetings();
+renderIntel();
+renderStudio();
+
 </script>
 </body>
 </html>
