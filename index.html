@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROB.CTRL</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050508;color:#e0e0e0;font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:9999;}
+.wrap{text-align:center;padding:2rem;max-width:520px;width:100%;}
+.logo{font-family:'JetBrains Mono',monospace;font-size:2.8rem;font-weight:700;color:#00ff88;text-shadow:0 0 30px rgba(0,255,136,0.4);letter-spacing:4px;margin-bottom:0.4rem;}
+.sub{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:3px;margin-bottom:3rem;}
+.links{display:flex;flex-direction:column;gap:0.75rem;align-items:stretch;}
+.link-card{display:block;padding:1rem 1.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;text-decoration:none;color:#e0e0e0;font-family:'JetBrains Mono',monospace;font-size:0.82rem;transition:all 0.2s;text-align:left;}
+.link-card:hover{border-color:rgba(0,255,136,0.4);color:#00ff88;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,255,136,0.06);}
+.lc-label{font-size:0.6rem;letter-spacing:2px;color:rgba(255,255,255,0.25);margin-bottom:3px;}
+.lc-title{font-weight:700;}
+.pulse{display:inline-block;width:7px;height:7px;background:#00ff88;border-radius:50%;margin-right:8px;animation:pulse 2s infinite;box-shadow:0 0 8px #00ff88;vertical-align:middle;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px #00ff88}50%{opacity:0.4;box-shadow:0 0 16px #00ff88}}
+.footer{margin-top:3rem;font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:rgba(255,255,255,0.18);letter-spacing:1px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><span class="pulse"></span>ROB.CTRL</div>
+  <div class="sub">AGENT ZERO WORKSPACE // 0xHashbrown // AUSTIN TX</div>
+  <div class="links">
+    <a class="link-card" href="mission-control/">
+      <div class="lc-label">// LAUNCH APP</div>
+      <div class="lc-title">📊 Mission Control Dashboard</div>
+    </a>
+    <a class="link-card" href="https://robertcedwards.com" target="_blank">
+      <div class="lc-label">// PORTFOLIO</div>
+      <div class="lc-title">🌐 robertcedwards.com</div>
+    </a>
+    <a class="link-card" href="https://hitflow.xyz" target="_blank">
+      <div class="lc-label">// PROJECT</div>
+      <div class="lc-title">💪 HitFlow — hitflow.xyz</div>
+    </a>
+    <a class="link-card" href="https://github.com/robertcedwards" target="_blank">
+      <div class="lc-label">// GITHUB</div>
+      <div class="lc-title">⚡ github.com/robertcedwards</div>
+    </a>
+  </div>
+  <div class="footer">SYS:ONLINE // BUILT WITH AGENT ZERO</div>
+</div>
+</body>
+</html>
