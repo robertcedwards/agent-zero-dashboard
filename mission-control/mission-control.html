@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROB.CTRL — Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050508;
+  --bg2: #0a0a0f;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.06);
+  --card-hover: rgba(255,255,255,0.07);
+  --accent: #00ff88;
+  --accent-glow: rgba(0,255,136,0.25);
+  --cyan: #00D4FF;
+  --red: #FF6B6B;
+  --yellow: #FFD93D;
+  --purple: #6C63FF;
+  --text: #e0e0e0;
+  --muted: rgba(255,255,255,0.45);
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+  --radius: 12px;
+  --header-h: 60px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* HEADER */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: rgba(5,5,8,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 1000;
+}
+.logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 12px var(--accent-glow);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 2px;
+}
+.pulse-dot {
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; box-shadow: 0 0 8px var(--accent); }
+  50% { opacity:0.5; box-shadow: 0 0 16px var(--accent); }
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(255,255,255,0.04);
+  padding: 4px;
+  border-radius: 40px;
+  border: 1px solid var(--card-border);
+}
+.tab-btn {
+  padding: 6px 16px;
+  border-radius: 40px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+}
+.tab-btn.active {
+  background: var(--accent);
+  color: #000;
+  text-shadow: none;
+}
+.tab-btn:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.06); }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+#live-clock { color: var(--text); }
+.sys-status {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--accent);
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+}
+
+/* MAIN */
+.main { padding-top: calc(var(--header-h) + 2rem); padding-bottom: 4rem; }
+.tab-content { display: none; max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+.tab-content.active { display: block; animation: fadeInUp 0.3s ease; }
+@keyframes fadeInUp {
+  from { opacity:0; transform: translateY(12px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+
+/* DASHBOARD */
+.welcome-bar {
+  padding: 1.5rem 0 2rem;
+  border-bottom: 1px solid rgba(0,255,136,0.15);
+  margin-bottom: 2rem;
+}
+.welcome-bar h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.welcome-bar h1 span { color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
+.welcome-bar .datetime {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+@media(max-width:900px){ .metrics-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:500px){ .metrics-grid { grid-template-columns: 1fr; } }
+
+.metric-card {
+  padding: 1.25rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--accent));
+  box-shadow: 0 0 12px var(--card-accent, var(--accent));
+}
+.metric-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+.metric-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.metric-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--card-accent, var(--accent));
+  text-shadow: 0 0 20px var(--accent-glow);
+  font-family: var(--mono);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.metric-trend {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.metric-controls { display:flex; align-items:center; gap:6px; margin-top:4px; }
+.metric-btn {
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  display:flex; align-items:center; justify-content:center;
+  transition: all 0.15s;
+}
+.metric-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+
+/* DASHBOARD BOTTOM */
+.dash-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media(max-width:800px){ .dash-bottom { grid-template-columns: 1fr; } }
+
+.section-title {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--card-border);
+}
+
+.activity-feed { padding: 1.25rem; }
+.activity-list { max-height: 280px; overflow-y: auto; }
+.activity-list::-webkit-scrollbar { width:4px; }
+.activity-list::-webkit-scrollbar-track { background: transparent; }
+.activity-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius:2px; }
+.activity-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.82rem;
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.activity-text { flex: 1; color: var(--text); }
+.activity-time { font-family:var(--mono); font-size:0.65rem; color:var(--muted); white-space:nowrap; }
+.add-btn {
+  margin-top: 0.75rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap:6px;
+}
+.add-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.priorities-card { padding: 1.25rem; }
+.priority-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.priority-item:last-child { border-bottom: none; }
+.priority-item input[type=checkbox] {
+  appearance: none;
+  width: 16px; height: 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.priority-item input[type=checkbox]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.priority-item input[type=checkbox]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.priority-text {
+  font-size: 0.82rem;
+  cursor: pointer;
+  flex: 1;
+  transition: all 0.2s;
+}
+.priority-item.checked .priority-text { text-decoration: line-through; color: var(--muted); }
+.priority-del { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.8rem; opacity:0; transition:opacity 0.2s; }
+.priority-item:hover .priority-del { opacity:1; }
+
+/* KANBAN */
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 1rem;
+  align-items: start;
+}
+@media(max-width:700px){ .kanban { grid-template-columns: 1fr; } }
+.kanban-col {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+.col-header {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.col-count {
+  background: rgba(255,255,255,0.08);
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+}
+.task-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.9rem;
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.task-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
+.task-title { font-size: 0.84rem; font-weight: 500; margin-bottom: 0.4rem; }
+.task-desc { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.6rem; line-height:1.4; }
+.task-meta { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.tag {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.tag-hitflow { background: rgba(0,255,136,0.15); color: #00ff88; }
+.tag-uuai { background: rgba(108,99,255,0.15); color: #6C63FF; }
+.tag-muralbot { background: rgba(255,107,107,0.15); color: #FF6B6B; }
+.tag-gpj { background: rgba(0,212,255,0.15); color: #00D4FF; }
+.tag-planet { background: rgba(255,217,61,0.15); color: #FFD93D; }
+.pri { font-family:var(--mono); font-size:0.6rem; padding:2px 7px; border-radius:20px; }
+.pri-high { background:rgba(255,107,107,0.15); color:#FF6B6B; }
+.pri-medium { background:rgba(255,217,61,0.15); color:#FFD93D; }
+.pri-low { background:rgba(0,212,255,0.12); color:#00D4FF; }
+
+/* TIMELINE */
+.timeline { padding: 1rem 0; }
+.phase {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.phase-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.phase-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: var(--bg);
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.phase.current .phase-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 16px var(--accent);
+}
+.phase-connector {
+  flex: 1;
+  width: 2px;
+  background: rgba(255,255,255,0.07);
+  margin-top: 4px;
+}
+.phase.current .phase-connector { background: linear-gradient(to bottom, var(--accent), rgba(0,255,136,0.1)); }
+.phase-card {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0;
+}
+.phase.current .phase-card { border-color: rgba(0,255,136,0.25); box-shadow: 0 0 30px rgba(0,255,136,0.05); }
+.phase-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.phase.current .phase-label { color: var(--accent); }
+.phase-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+.milestone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.milestone input[type=checkbox] {
+  appearance: none;
+  width:14px; height:14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius:3px;
+  cursor:pointer;
+  position:relative;
+  flex-shrink:0;
+  transition:all 0.2s;
+}
+.milestone input[type=checkbox]:checked { background:var(--accent); border-color:var(--accent); }
+.milestone input[type=checkbox]:checked::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#000; font-size:0.6rem; font-weight:700; }
+.milestone.done { color: rgba(255,255,255,0.3); text-decoration: line-through; }
+
+/* NOTES */
+.notes-wrap { padding: 1.5rem 0; }
+.notes-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.notes-saved { color: var(--accent); }
+#notes-area {
+  width: 100%;
+  min-height: 520px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  line-height: 1.7;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#notes-area:focus { border-color: rgba(0,255,136,0.3); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background: #0e0e14;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 480px;
+  animation: fadeInUp 0.2s ease;
+}
+.modal h3 { font-family:var(--mono); font-size:0.85rem; margin-bottom:1rem; color:var(--accent); letter-spacing:1px; }
+.modal input, .modal textarea, .modal select {
+  width:100%; padding:8px 12px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:0.8rem;
+  margin-bottom:10px;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.modal input:focus, .modal textarea:focus, .modal select:focus { border-color:rgba(0,255,136,0.3); }
+.modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:4px; }
+.btn-primary {
+  padding:7px 16px;
+  background:var(--accent);
+  color:#000;
+  border:none;
+  border-radius:8px;
+  font-family:var(--mono);
+  font-size:0.75rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-primary:hover { box-shadow:0 0 16px var(--accent-glow); }
+.btn-cancel {
+  padding:7px 16px;
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  font-family:var(--mono);
+  font-size:0.75rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-cancel:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
+.projects-header { margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="pulse-dot"></div>
+    ROB.CTRL
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="dashboard">📊 DASHBOARD</button>
+    <button class="tab-btn" data-tab="projects">📋 PROJECTS</button>
+    <button class="tab-btn" data-tab="timeline">📅 TIMELINE</button>
+    <button class="tab-btn" data-tab="notes">📝 NOTES</button>
+  </nav>
+  <div class="header-right">
+    <span id="live-clock"></span>
+    <span class="sys-status"><span class="pulse-dot" style="width:6px;height:6px"></span>SYS:ONLINE</span>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- DASHBOARD TAB -->
+<div class="tab-content active" id="tab-dashboard">
+  <div class="welcome-bar">
+    <h1 id="welcome-msg">Good evening, <span>Rob</span></h1>
+    <div class="datetime" id="full-datetime"></div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="card metric-card" style="--card-accent:#00ff88">
+      <div class="metric-icon">🚀</div>
+      <div class="metric-label">Projects Shipped</div>
+      <div class="metric-value" id="m-shipped">1</div>
+      <div class="metric-trend">MVP: Mar 15 · 2026 goal: 3</div>
+    </div>
+    <div class="card metric-card" style="--card-accent:#00D4FF">
+      <div class="metric-icon">📋</div>
+      <div class="metric-label">Open Issues</div>
+      <div class="metric-value" id="m-issues">6</div>
+      <div class="metric-trend">agent-zero-workspace</div>
+    </div>
+    <div class="card metric-card" style="--card-accent:#FFD93D">
+      <div class="metric-icon">✅</div>
+      <div class="metric-label">Tasks Today</div>
+      <div class="metric-value" id="m-tasks">0</div>
+      <div class="metric-controls">
+        <button class="metric-btn" onclick="adjustTasks(-1)">−</button>
+        <button class="metric-btn" onclick="adjustTasks(1)">+</button>
+      </div>
+    </div>
+    <div class="card metric-card" style="--card-accent:#FF6B6B">
+      <div class="metric-icon">⏳</div>
+      <div class="metric-label">Days to MVP</div>
+      <div class="metric-value" id="m-days">—</div>
+      <div class="metric-trend">UU AI MVP — Mar 15</div>
+    </div>
+  </div>
+
+  <div class="dash-bottom">
+    <div class="card activity-feed">
+      <div class="section-title">Activity Feed</div>
+      <div class="activity-list" id="activity-list"></div>
+      <button class="add-btn" onclick="openActivityModal()">+ Add Activity</button>
+    </div>
+    <div class="card priorities-card">
+      <div class="section-title">Top Priorities</div>
+      <div id="priorities-list"></div>
+      <button class="add-btn" onclick="openPriorityModal()">+ Add Priority</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS TAB -->
+<div class="tab-content" id="tab-projects">
+  <div class="projects-header">
+    <div class="section-title" style="margin-bottom:0">Kanban Board</div>
+    <button class="btn-primary" onclick="openTaskModal()">+ New Task</button>
+  </div>
+  <div class="kanban">
+    <div class="kanban-col" id="col-backlog">
+      <div class="col-header"><span>⬜ BACKLOG</span><span class="col-count" id="cnt-backlog">0</span></div>
+      <div class="tasks" id="tasks-backlog"></div>
+      <button class="add-btn" onclick="openTaskModal('backlog')">+ Add</button>
+    </div>
+    <div class="kanban-col" id="col-inprogress">
+      <div class="col-header"><span>🟡 IN PROGRESS</span><span class="col-count" id="cnt-inprogress">0</span></div>
+      <div class="tasks" id="tasks-inprogress"></div>
+      <button class="add-btn" onclick="openTaskModal('inprogress')">+ Add</button>
+    </div>
+    <div class="kanban-col" id="col-done">
+      <div class="col-header"><span>🟢 DONE</span><span class="col-count" id="cnt-done">0</span></div>
+      <div class="tasks" id="tasks-done"></div>
+      <button class="add-btn" onclick="openTaskModal('done')">+ Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE TAB -->
+<div class="tab-content" id="tab-timeline">
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<!-- NOTES TAB -->
+<div class="tab-content" id="tab-notes">
+  <div class="notes-wrap">
+    <div class="notes-meta">
+      <span id="notes-chars">0 chars</span>
+      <span>·</span>
+      <span id="notes-words">0 words</span>
+      <span>·</span>
+      <span class="notes-saved" id="notes-saved">UNSAVED</span>
+    </div>
+    <textarea id="notes-area" placeholder="// notes..."></textarea>
+  </div>
+</div>
+
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="activity-modal">
+  <div class="modal">
+    <h3>// ADD ACTIVITY</h3>
+    <input type="text" id="activity-input" placeholder="What happened?" />
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('activity-modal')">Cancel</button>
+      <button class="btn-primary" onclick="addActivity()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="priority-modal">
+  <div class="modal">
+    <h3>// ADD PRIORITY</h3>
+    <input type="text" id="priority-input" placeholder="Priority task..." />
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('priority-modal')">Cancel</button>
+      <button class="btn-primary" onclick="addPriority()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <h3>// ADD TASK</h3>
+    <input type="text" id="task-title-input" placeholder="Task title" />
+    <input type="text" id="task-desc-input" placeholder="Description (optional)" />
+    <select id="task-project-input">
+      <option value="hitflow">HitFlow</option>
+      <option value="uuai">UU AI</option>
+      <option value="muralbot">Mural Bot</option>
+      <option value="gpj">GPJ</option>
+      <option value="planet">Planet.tech</option>
+    </select>
+    <select id="task-pri-input">
+      <option value="high">High Priority</option>
+      <option value="medium">Medium Priority</option>
+      <option value="low">Low Priority</option>
+    </select>
+    <select id="task-col-input">
+      <option value="backlog">Backlog</option>
+      <option value="inprogress">In Progress</option>
+      <option value="done">Done</option>
+    </select>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('task-modal')">Cancel</button>
+      <button class="btn-primary" onclick="addTask()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STORAGE HELPERS =====
+const S = key => JSON.parse(localStorage.getItem('rob_mc_' + key) || 'null');
+const W = (key, val) => localStorage.setItem('rob_mc_' + key, JSON.stringify(val));
+
+// ===== CLOCK =====
+function updateClock() {
+  const now = new Date();
+  const cst = new Date(now.toLocaleString('en-US', {timeZone:'America/Chicago'}));
+  const h = cst.getHours(), m = cst.getMinutes(), s = cst.getSeconds();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('live-clock').textContent = `${pad(h)}:${pad(m)}:${pad(s)} CST`;
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('full-datetime').textContent = `${days[cst.getDay()]}, ${months[cst.getMonth()]} ${cst.getDate()}, ${cst.getFullYear()} · ${pad(h)}:${pad(m)} CST`;
+  const greet = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  document.getElementById('welcome-msg').innerHTML = `Good ${greet}, <span>Rob</span>`;
+  // Days to MVP (March 15 2026)
+  const mvp = new Date('2026-03-15T00:00:00');
+  const diff = Math.ceil((mvp - now) / 86400000);
+  document.getElementById('m-days').textContent = diff > 0 ? diff : 'NOW';
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ===== TABS =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== TASKS (tasks today) =====
+let tasksToday = S('tasks_today') || 0;
+document.getElementById('m-tasks').textContent = tasksToday;
+function adjustTasks(d) {
+  tasksToday = Math.max(0, tasksToday + d);
+  W('tasks_today', tasksToday);
+  document.getElementById('m-tasks').textContent = tasksToday;
+}
+
+// ===== ACTIVITY FEED =====
+const defaultActivities = [
+  {text: 'A2A cross-agent sync confirmed — Rob ↔ Kevin live 🤖', time: Date.now()},
+  {text: 'UU AI 19-day sprint plan built + pushed to GitHub', time: Date.now() - 1800000},
+  {text: 'Kevin's agent pinged — dev PAUSED, 5 arch decisions pending', time: Date.now() - 3600000},
+  {text: 'Team plan saved: meetings/2026-02-24-uuai-team-plan.md', time: Date.now() - 3600000},
+  {text: 'Mission Control dashboard launched 🚀', time: Date.now() - 86400000},
+  {text: 'Morning brief scheduler activated — 8am CST daily', time: Date.now() - 86400000},
+  {text: 'agent-zero-workspace GitHub HQ initialized', time: Date.now() - 86400000*2},
+  {text: 'UU AI Warren Buffett POC complete ✅', time: Date.now() - 86400000*3},
+  {text: 'Agent Zero personal assistant onboarding complete', time: Date.now() - 86400000*5},
+];
+let activities = S('activities') || defaultActivities;
+
+function timeAgo(ts) {
+  const d = Date.now() - ts;
+  if (d < 60000) return 'just now';
+  if (d < 3600000) return Math.floor(d/60000) + 'm ago';
+  if (d < 86400000) return Math.floor(d/3600000) + 'h ago';
+  return Math.floor(d/86400000) + 'd ago';
+}
+function renderActivities() {
+  const list = document.getElementById('activity-list');
+  list.innerHTML = activities.slice().reverse().map(a => `
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-text">${a.text}</div>
+      <div class="activity-time">${timeAgo(a.time)}</div>
+    </div>
+  `).join('');
+}
+function openActivityModal() { document.getElementById('activity-modal').classList.add('open'); document.getElementById('activity-input').focus(); }
+function addActivity() {
+  const v = document.getElementById('activity-input').value.trim();
+  if (!v) return;
+  activities.push({text: v, time: Date.now()});
+  W('activities', activities);
+  renderActivities();
+  document.getElementById('activity-input').value = '';
+  closeModal('activity-modal');
+}
+renderActivities();
+
+// ===== PRIORITIES =====
+const defaultPriorities = [
+  {text: '📞 Schedule strategy sync with Kevin — lock 5 arch decisions', done: false},
+  {text: '🔧 UU AI — ElevenLabs ↔ HeyGen voice wiring (critical path)', done: false},
+  {text: '⚙️  Set up UU AI 3rd Agent Zero instance — Issue #16', done: false},
+  {text: '🔑 GitHub + Gmail accounts for UU AI agent — Issues #17 #18', done: false},
+  {text: '🗄️  Supabase auth + pgvector setup', done: false},
+  {text: '📝 SOUL.md generator pipeline V1', done: false},
+  {text: '🏃 HitFlow public launch prep', done: false},
+];
+let priorities = S('priorities') || defaultPriorities;
+function renderPriorities() {
+  const list = document.getElementById('priorities-list');
+  list.innerHTML = priorities.map((p,i) => `
+    <div class="priority-item ${p.done?'checked':"'}">
+      <input type="checkbox" ${p.done?'checked':''} onchange="togglePriority(${i})">
+      <span class="priority-text" onclick="togglePriority(${i})">${p.text}</span>
+      <button class="priority-del" onclick="delPriority(${i})">✕</button>
+    </div>
+  `).join('');
+}
+function togglePriority(i) { priorities[i].done = !priorities[i].done; W('priorities', priorities); renderPriorities(); }
+function delPriority(i) { priorities.splice(i,1); W('priorities', priorities); renderPriorities(); }
+function openPriorityModal() { document.getElementById('priority-modal').classList.add('open'); document.getElementById('priority-input').focus(); }
+function addPriority() {
+  const v = document.getElementById('priority-input').value.trim();
+  if (!v) return;
+  priorities.push({text: v, done: false});
+  W('priorities', priorities); renderPriorities();
+  document.getElementById('priority-input').value = '';
+  closeModal('priority-modal');
+}
+renderPriorities();
+
+// ===== KANBAN =====
+const tagMap = {hitflow:'hitflow', 'uuai':'uuai', muralbot:'muralbot', gpj:'gpj', planet:'planet'};
+const tagLabel = {hitflow:'HitFlow', 'uuai':'UU AI', muralbot:'Mural Bot', gpj:'GPJ', planet:'Planet.tech'};
+const defaultTasks = [
+  {id:1, title:'SOUL.md generation pipeline', desc:'Claude prompt chain from intake form', project:'uuai', pri:'high', col:'backlog'},
+  {id:2, title:'Supabase auth + pgvector setup', desc:'User accounts + memory layer', project:'uuai', pri:'high', col:'backlog'},
+  {id:3, title:'HitFlow landing page', desc:'Public-facing product page', project:'hitflow', pri:'medium', col:'backlog'},
+  {id:4, title:'Farcaster social sharing', desc:'Share workouts as 0xHashbrown', project:'hitflow', pri:'medium', col:'backlog'},
+  {id:5, title:'Mural Bot SVG path preview UI', desc:'Visualize CNC paths before painting', project:'muralbot', pri:'low', col:'backlog'},
+  {id:6, title:'Planet.tech April consulting scope', desc:'Define 10hr deliverables', project:'planet', pri:'low', col:'backlog'},
+  {id:7, title:'ElevenLabs ↔ HeyGen voice wiring', desc:'Critical path to MVP demo', project:'uuai', pri:'high', col:'inprogress'},
+  {id:8, title:'Morning brief pipeline', desc:'8am CST GitHub issue automation', project:'gpj', pri:'medium', col:'inprogress'},
+  {id:9, title:'Mission Control dashboard', desc:'This very dashboard!', project:'gpj', pri:'high', col:'inprogress'},
+  {id:10, title:'Warren Buffett POC', desc:'First UU AI avatar prototype', project:'uuai', pri:'high', col:'done'},
+  {id:11, title:'GitHub workspace HQ', desc:'agent-zero-workspace initialized', project:'gpj', pri:'medium', col:'done'},
+  {id:12, title:'Limitless API ingestion script', desc:'lifelog_ingest.py deployed', project:'gpj', pri:'medium', col:'done'},
+  {id:13, title:'UU AI 3rd Agent Zero (port 50082)', desc:'Issue #16 — dedicated UU AI instance', project:'uuai', pri:'high', col:'backlog'},
+  {id:14, title:'GitHub + Gmail for UU AI agent', desc:'Issues #17 + #18', project:'uuai', pri:'high', col:'backlog'},
+  {id:15, title:'QMD Memory research', desc:'Issue #20 — better than RAG for Open Claude', project:'uuai', pri:'medium', col:'backlog'},
+  {id:16, title:'Twin Builder onboarding flow', desc:'UI for creating a digital twin', project:'uuai', pri:'high', col:'backlog'},
+  {id:17, title:'A2A cross-agent sync', desc:'Rob ↔ Kevin live A2A confirmed ✅', project:'gpj', pri:'high', col:'done'},
+];
+let tasks = S('tasks') || defaultTasks;
+let nextId = tasks.reduce((m,t)=>Math.max(m,t.id),0)+1;
+let taskModalCol = 'backlog';
+
+function renderKanban() {
+  ['backlog','inprogress','done'].forEach(col => {
+    const colTasks = tasks.filter(t => t.col === col);
+    document.getElementById('tasks-'+col).innerHTML = colTasks.map(t => `
+      <div class="task-card" onclick="moveTask(${t.id})">
+        <div class="task-title">${t.title}</div>
+        <div class="task-desc">${t.desc||''}</div>
+        <div class="task-meta">
+          <span class="tag tag-${tagMap[t.project]||t.project}">${tagLabel[t.project]||t.project}</span>
+          <span class="pri pri-${t.pri}">${t.pri}</span>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('cnt-'+col).textContent = colTasks.length;
+  });
+}
+function moveTask(id) {
+  const t = tasks.find(x=>x.id===id);
+  if (!t) return;
+  const cols = ['backlog','inprogress','done'];
+  const next = cols[(cols.indexOf(t.col)+1)%cols.length];
+  t.col = next;
+  W('tasks', tasks); renderKanban();
+}
+function openTaskModal(col) {
+  taskModalCol = col||'backlog';
+  document.getElementById('task-col-input').value = taskModalCol;
+  document.getElementById('task-modal').classList.add('open');
+  document.getElementById('task-title-input').focus();
+}
+function addTask() {
+  const title = document.getElementById('task-title-input').value.trim();
+  if (!title) return;
+  tasks.push({
+    id: nextId++,
+    title,
+    desc: document.getElementById('task-desc-input').value.trim(),
+    project: document.getElementById('task-project-input').value,
+    pri: document.getElementById('task-pri-input').value,
+    col: document.getElementById('task-col-input').value,
+  });
+  W('tasks', tasks); renderKanban();
+  document.getElementById('task-title-input').value = '';
+  document.getElementById('task-desc-input').value = '';
+  closeModal('task-modal');
+}
+renderKanban();
+
+// ===== TIMELINE =====
+const phases = [
+  {
+    label:'FEB-MAR 2026', title:'UU AI MVP', current:true,
+    milestones:[
+      {text:'Warren Buffett POC prototype', done:true},
+      {text:'ElevenLabs + HeyGen voice wiring', done:false},
+      {text:'Supabase auth + user accounts', done:false},
+      {text:'SOUL.md generator pipeline', done:false},
+      {text:'MVP demo ready', done:false},
+    ]
+  },
+  {
+    label:'MAR–APR 2026', title:'HITFLOW PUBLIC LAUNCH', current:false,
+    milestones:[
+      {text:'Landing page live', done:false},
+      {text:'Farcaster social sharing', done:false},
+      {text:'Public beta launch', done:false},
+      {text:'First 100 users', done:false},
+    ]
+  },
+  {
+    label:'MAY–JUN 2026', title:'MURAL BOT TEST RUN', current:false,
+    milestones:[
+      {text:'SVG-to-CNC pipeline working', done:false},
+      {text:'First small test mural', done:false},
+      {text:'Kristofoletti collab session', done:false},
+      {text:'Document process for blog', done:false},
+    ]
+  },
+  {
+    label:'JUL–DEC 2026', title:'SCALE & SHIP', current:false,
+    milestones:[
+      {text:'HitFlow v2 features', done:false},
+      {text:'UU AI beta users', done:false},
+      {text:'Mural Bot first commission', done:false},
+      {text:'Blog content pipeline live', done:false},
+    ]
+  }
+];
+let tlState = S('timeline') || phases;
+function renderTimeline() {
+  document.getElementById('timeline').innerHTML = tlState.map((ph,pi) => `
+    <div class="phase ${ph.current?'current':''} ">
+      <div class="phase-line">
+        <div class="phase-dot"></div>
+        <div class="phase-connector"></div>
+      </div>
+      <div class="card phase-card">
+        <div class="phase-label">${ph.label}</div>
+        <div class="phase-title">${ph.title}</div>
+        ${ph.milestones.map((m,mi)=>`
+          <div class="milestone ${m.done?'done':''}">
+            <input type="checkbox" ${m.done?'checked':''} onchange="toggleMilestone(${pi},${mi})">
+            <span>${m.text}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function toggleMilestone(pi,mi) {
+  tlState[pi].milestones[mi].done = !tlState[pi].milestones[mi].done;
+  W('timeline', tlState); renderTimeline();
+}
+renderTimeline();
+
+// ===== NOTES =====
+const defaultNote = `# UU AI Quick Reference — Feb 2026
+
+## 🤖 Agent Network
+- Rob's Agent Zero: localhost:50080 | A2A: host.docker.internal:50080/a2a/t-2u4313AclHKwZRbm
+- Kevin's Agent Zero: localhost:50081 | A2A: host.docker.internal:50081/a2a/t-ruIcNmqXkLu7-9f-
+- UU AI Agent Zero: localhost:50082 (PENDING — Issue #16)
+
+## 🗓️ Sprint Deadlines
+- MVP: March 15, 2026
+- Week 1 (Feb 24-28): Strategy sync + infra setup
+- Week 2 (Mar 1-7): Supabase + SOUL.md pipeline
+- Week 3 (Mar 8-15): Polish + end-to-end demo
+
+## 🚨 5 Architectural Decisions (LOCK THIS WEEK)
+1. MVP scope cutoff — what's in vs out for Mar 15?
+2. ElevenLabs voice wiring — in MVP or deferred?
+3. SOUL.md ingestion — file upload or structured interview?
+4. Privacy/consent framework — minimum viable version?
+5. Pricing model — placeholder needed for onboarding UX
+
+## 📋 Open GitHub Issues
+- #16 UU AI 3rd Agent Zero instance (Rob)
+- #17 GitHub account for UU AI agent (Rob)
+- #18 Gmail accounts for agents (Rob)
+- #19 Kevin MacBook Air persistent server (Kevin)
+- #20 Research QMD Memory for Open Claude
+- #21 Rename 4evr AI → UU AI everywhere (Both)
+
+## 🐙 GitHub Repos
+- agent-zero-workspace: github.com/robertcedwards/agent-zero-workspace
+- UU AI: github.com/robertcedwards/4ver-heygen-openclaw
+- HIT-Tracker-TUL: github.com/robertcedwards/HIT-Tracker-TUL
+- Dashboard: robertcedwards.github.io/agent-zero-dashboard/mission-control/
+
+## ⚙️ Scheduler Tasks
+- Morning Brief: GPcPT4Iv (8am CST daily)
+
+## 🔗 Key URLs
+- hitflow.xyz | robertcedwards.com | limitless.ai/developers
+
+## 🧠 Agent Zero
+- Model: Claude Sonnet 4.6
+- Project: uuai-team
+- Workspace: /a0/usr/projects/uuai-team`;
+
+const notesArea = document.getElementById('notes-area');
+let notesSaveTimer;
+notesArea.value = S('notes') || defaultNote;
+function updateNotesStats() {
+  const v = notesArea.value;
+  document.getElementById('notes-chars').textContent = v.length + ' chars';
+  document.getElementById('notes-words').textContent = (v.trim() ? v.trim().split(/\s+/).length : 0) + ' words';
+}
+notesArea.addEventListener('input', () => {
+  updateNotesStats();
+  document.getElementById('notes-saved').textContent = 'SAVING...';
+  clearTimeout(notesSaveTimer);
+  notesSaveTimer = setTimeout(() => {
+    W('notes', notesArea.value);
+    const t = new Date().toLocaleTimeString('en-US',{timeZone:'America/Chicago',hour12:false});
+    document.getElementById('notes-saved').textContent = 'SAVED ' + t;
+  }, 500);
+});
+updateNotesStats();
+
+// ===== MODALS =====
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+  if ((e.metaKey||e.ctrlKey) && e.key==='k') { e.preventDefault(); document.querySelector('.tab-btn[data-tab="projects"]').click(); }
+});
+document.querySelectorAll('.modal input').forEach(inp => {
+  inp.addEventListener('keydown', e => { if (e.key==='Enter') inp.closest('.modal').querySelector('.btn-primary').click(); });
+});
+</script>
+</body>
+</html>
