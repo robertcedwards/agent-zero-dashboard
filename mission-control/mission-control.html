@@ -824,7 +824,7 @@ let priorities = S('priorities') || defaultPriorities;
 function renderPriorities() {
   const list = document.getElementById('priorities-list');
   list.innerHTML = priorities.map((p,i) => `
-    <div class="priority-item ${p.done?'checked':"'}">
+    <div class="priority-item ${p.done?'checked':''}">
       <input type="checkbox" ${p.done?'checked':''} onchange="togglePriority(${i})">
       <span class="priority-text" onclick="togglePriority(${i})">${p.text}</span>
       <button class="priority-del" onclick="delPriority(${i})">✕</button>
